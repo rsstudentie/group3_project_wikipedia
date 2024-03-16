@@ -38,15 +38,15 @@ Push your changes to the repository on GitHub:
 git push origin feature/your-feature-name
 ```
 
-Step 6: Create a Pull Request (PR)
+### Step 6: Create a Pull Request (PR)
 Go to the GitHub page of the original repository. You should see a 'Compare & pull request' button for the branch you just pushed. Click on that button to start creating a pull request.
 
 In the pull request description, provide a clear explanation of the changes you have made. Make sure to reference any related issues or pull requests.
 
-Step 7: Review and Collaborate
+### Step 7: Review and Collaborate
 Once your pull request is submitted, project maintainers will review your changes. Be prepared to address any feedback or concerns they may have. Collaboration and iteration are key to the success of the project.
 
-Step 8: Keep Your Local Repository Updated
+### Step 8: Keep Your Local Repository Updated
 Periodically, you may want to fetch and merge changes from the original repository to keep your local repository up-to-date:
 
 ```bash
