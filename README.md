@@ -10,7 +10,7 @@ To contribute to this project, follow the steps outlined below:
 Clone the repository to your local machine. Open a terminal and run the following command:
 
 ```bash
-    git clone https://github.com/original-repository/project-name.git
+    git clone https://github.com/rsstudentie/group3_project_wikipedia.git
 ```
 
 ### Step 2: Create a Branch
