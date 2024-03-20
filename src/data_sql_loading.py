@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 """
 File to load the data from csv to sql and create the appropriate table
 """
@@ -11,7 +10,6 @@ def main():
 # if _name_ == "_main_":
 main()
 
-=======
 # """
 # File to load the data from csv to sql and create the appropriate table
 # """
@@ -71,6 +69,3 @@ def main():
     file_path = "../data/clean/train_1_cleaned.csv"
     upload_csv_to_sqlite(file_path)
 
-# if _name_ == "_main_":
-main()
->>>>>>> 82921b5 (new changes)

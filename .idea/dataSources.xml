@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="wikipedia" uuid="a66373b7-afc9-402d-b8a3-3421f2484c81">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\albyd\python_group_project\group3_project_wikipedia\src\wikipedia.db</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-<<<<<<< HEAD
-    <data-source source="LOCAL" name="wikitop100" uuid="33a540c3-4878-48fb-9eb8-f466c40ee2b1">
+    <data-source source="LOCAL" name="wikitop100" uuid="7c1d3f11-6aba-4fd5-a0db-9678588ac0b4">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
@@ -24,7 +16,5 @@
         </library>
       </libraries>
     </data-source>
-=======
->>>>>>> 82921b5 (new changes)
   </component>
 </project>
