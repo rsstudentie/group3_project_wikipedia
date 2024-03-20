@@ -10,9 +10,6 @@ import matplotlib.pyplot as plt
 from wikipedia.src.sqllite.sqllite_engine import SqlLiteEngine
 
 
-
-# print(top_page_df.head())
-
 def anamoly_detection():
     session = SqlLiteEngine().get_session()
 
@@ -52,4 +49,5 @@ def anamoly_detection():
     plt.title('Data after removing anomalies')
     plt.xlabel('Date')
     plt.ylabel('Views (in millions)')
-    plt.show()
+
+    return plt

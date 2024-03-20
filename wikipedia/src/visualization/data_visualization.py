@@ -50,11 +50,6 @@ def plot_avg_views_per_day():
 
     return plt
 
-session = SqlLiteEngine().get_session()
-with session as session:
-    result = session.execute('SELECT * FROM page_visits')
-    train_data = pd.DataFrame(result)
-
 def plot_median_views_per_day():
     session = SqlLiteEngine().get_session()
     with session as session:
