@@ -1,54 +1,108 @@
 """
-Data Visualization for the datasets of Wikpedia timeseries
-    Works on the _cleaned.csv file created in the Wikipedia_DataCleaning.py
+Data Visualization for the datasets of Wikipedia timeseries
+    Downloads data from SQLite and through pandas reads it into a DataFrame
+    the download function presents a select_statement argument in which
+    a desired select statement can be inputted.
 """
 
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import def_language as language
+from loadsql import download_data_from_sqlite as dwnld
 
-# Uncomment the file path you need
-data_path = "../data/clean/train_1_cleaned.csv"
-# data_path = "../data/clean/train_2_cleaned.csv"
-# data_path = "../data/clean/key_1_cleaned.csv"
-# data_path = "../data/clean/key_2_cleaned.csv"
+""" We need to import the data from the SQL database"""
 
+
+select_statement = """SELECT Page, SUM(Visits)
+from page_visits
+group by Page
+order by SUM(Visits) desc
+limit 100;
+"""
+
+
+dwnld(select_statement=select_statement)
+
+
+
+data_path = ...
 train_data = pd.read_csv(data_path)
 
 # Transforming the Date column to a datetime format
 train_data['Date'] = pd.DatetimeIndex(train_data['Date'])
 
-# Average number of views per day
-temp = train_data.groupby('Date')['Visits'].mean()
-plt.figure(figsize=(15,4))
-plt.xlabel('Date', fontsize=8)
-plt.ylabel('Avg views',fontsize=8)
-plt.title('Average number of views per day', fontsize=12)
-plt.plot(temp,label='Visits')
-plt.xticks(fontsize=8)
-plt.yticks(fontsize=8)
-plt.legend()
-plt.tight_layout()
-plt.show()
 
-# Median number of views per day
-temp = train_data.groupby('Date')['Visits'].median()
-plt.figure(figsize=(15,4))
-plt.xlabel('Date')
-plt.ylabel('Median views', fontsize=8)
-plt.title('Median number of views per day', fontsize=8)
-plt.plot(temp,label='Visits')
-plt.legend()
-plt.xticks(fontsize=8)
-plt.yticks(fontsize=8)
-plt.tight_layout()
-plt.show()
+def plot_avg_views_per_day(ax, train_data):
+    # Calculate the average number of views per day
+    temp = train_data.groupby('Date')['Visits'].mean()
 
-# Creating new columns for year, month, and day after extracting from Date column
-train_data['year']=train_data.Date.dt.year
-train_data['month']=train_data.Date.dt.month
-train_data['day']=train_data.Date.dt.day
+    # Set up the plot
+    ax.figure(figsize=(15, 4))
+    ax.xlabel('Date', fontsize=8)
+    ax.ylabel('Avg views', fontsize=8)
+    ax.title('Average number of views per day', fontsize=12)
+
+    # Plot the average views per day
+
+    # # Set up the ticks
+    # plt.xticks(fontsize=8)
+    # plt.yticks(fontsize=8)
+    #
+    # # Show legend
+    # plt.legend()
+    #
+    # # Adjust layout and show the plot
+    # plt.tight_layout()
+
+    return ax.plot(temp, label='Visits')
+
+fig, ax = plt.subplots(1, 1)
+plot_avg_views_per_day(ax, train_data)
+
+
+def plot_median_views_per_day(ax, train_data):
+    # Calculate the median number of views per day
+    temp = train_data.groupby('Date')['Visits'].median()
+
+    # Set up the plot
+    ax.figure(figsize=(15, 4))
+    ax.xlabel('Date', fontsize=8)
+    ax.ylabel('Median views', fontsize=8)
+    ax.title('Median number of views per day', fontsize=8)
+
+    # Plot the median views per day
+
+    # # Customize and show the plot
+    # ax.legend()
+    # ax.xticks(fontsize=8)
+    # ax.yticks(fontsize=8)
+    # ax.tight_layout()
+
+    return ax.plot(temp, label='Visits')
+
+
+plot_median_views_per_day(plt, train_data)
+
+
+def extract_date_components(df, date_column):
+    """
+    Extracts year, month, and day from a date column in a DataFrame and creates new columns for each.
+
+    Parameters:
+    - df: pandas DataFrame containing the date column.
+    - date_column: The name of the column in df that contains date values.
+    """
+    # Ensure the date column is in datetime format
+    df[date_column] = pd.to_datetime(df[date_column])
+
+    # Create new columns for year, month, and day
+    df['year'] = df[date_column].dt.year
+    df['month'] = df[date_column].dt.month
+    df['day'] = df[date_column].dt.day
+
+extract_date_components(train_data, 'Date')
+
 
 # Creating new column and replacing month with encoded value
 train_data['month_num'] = train_data['month']
@@ -155,4 +209,4 @@ top_page_df.head()
 
 top_page_df.plot()
 plt.xticks(fontsize=8)
-plt.yticks(fontsize=8) 
+plt.yticks(fontsize=8)
