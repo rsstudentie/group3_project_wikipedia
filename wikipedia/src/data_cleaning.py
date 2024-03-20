@@ -24,6 +24,8 @@ train_data = pd.melt(df,id_vars=['Page'],var_name='Date',value_name='Visits')
 # train_data.shape
 # (79784650, 3)
 
+train_data = train_data.sample
+
 # Uncomment this to use a smaller sample of data
 #train_data = train_data.sample(frac=0.2)
 
