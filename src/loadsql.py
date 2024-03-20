@@ -2,12 +2,8 @@ import csv
 from datetime import datetime
 from model import Visits, Key
 import pandas as pd
-<<<<<<< HEAD
 from sqlalchemy import create_engine
 
-
-=======
->>>>>>> 82921b5 (new changes)
 # Function to load data from CSV to the 'page_visits' table
 def load_page_visits_from_csv(csv_file, session):
     with open(csv_file, newline='', encoding='utf-8') as csvfile:
@@ -35,7 +31,6 @@ def load_keys_from_csv(csv_file, session):
             session.add(key_entry)
         session.commit()
 
-<<<<<<< HEAD
 
 def create_sqlite_engine():
     engine = create_engine('sqlite:///wikipedia.db')
@@ -57,17 +52,6 @@ def main():
     upload_csv_to_sqlite(file_path)
 
 # if _name_ == "_main_":
-main()
+#main()
 
-def download_data_from_sqlite(select_statement, file_path_to_save='../data/clean/cleaned_data.csv'):
-    engine = create_engine('sqlite:///wikipedia.db')
 
-    # Use pandas to execute the dummy select statement and read the data into a DataFrame
-    df = pd.read_sql_query(select_statement, engine)
-
-    # Save the DataFrame to a CSV file
-    df.to_csv(file_path_to_save, index=False)
-
-    print(f"Data downloaded and saved to {file_path_to_save}")
-=======
->>>>>>> 82921b5 (new changes)

@@ -8,8 +8,17 @@ Data Visualization for the datasets of Wikpedia timeseries
 
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor, IsolationForest
-from statsmodels.tsa.stattools import adfuller
-from statsmodels.graphics import tsaplots
+import sqlite3
+import matplotlib.pyplot as plt
+
+conn = sqlite3.connect('wikitop100.db')
+query = 'SELECT Date, Visits FROM page_visits'
+page_visits_df = pd.read_sql_query(query, conn)
+conn.close()
+
+top_page_df = page_visits_df.set_index('Date')
+
+print(top_page_df.head())
 
 # Setting up the Isolation Forest model and fitting it to the DF
 isolation_forest_model = IsolationForest(contamination=0.05)
@@ -38,9 +47,12 @@ plt.plot(top_page_df.index,top_page_df.rolling_mean)
 plt.title('Data after removing anomalies')
 plt.xlabel('Date')
 plt.ylabel('Views (in millions)')
-plt.show(
+plt.show()
 
-top_page_df = top_page_df.drop(columns=['Visits','anomaly','new_visits'])
-top_page_df = top_page_df.rename(columns={'rolling_mean':'Views'})
+# top_page_df.drop(columns=['Visits','anomaly','new_visits'], inplace=True)
+# top_page_df = top_page_df.rename(columns={'rolling_mean':'Views'})
 
-## Save top_page_df as csv for further analysis
+print(top_page_df.head())
+
+#top_page_df.to_sql('no_anomaly_visits', con=sqlite3.connect('wikitop100.db'), if_exists='replace', index=False)
+

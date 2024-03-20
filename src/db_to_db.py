@@ -19,7 +19,7 @@ top_pages = cursor_existing.fetchall()
 conn_new = sqlite3.connect('wikitop100.db')
 cursor_new = conn_new.cursor()
 
-# Step 2: Create a new table in the new database
+# Creating a new table in the new database
 cursor_new.execute('''
     CREATE TABLE IF NOT EXISTS page_visits (
         Page TEXT,
@@ -28,7 +28,7 @@ cursor_new.execute('''
     )
 ''')
 
-# Step 3: For each top page, select all records and insert them into the new database
+# Selecting all records and insert them into the new database
 for page, _ in top_pages:
     cursor_existing.execute('SELECT Page, Date, Visits FROM page_visits WHERE Page = ?', (page,))
     page_records = cursor_existing.fetchall()
@@ -36,6 +36,5 @@ for page, _ in top_pages:
 
 conn_new.commit()
 
-# Close both connections
 conn_existing.close()
 conn_new.close()

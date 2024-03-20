@@ -9,21 +9,35 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.graphics import tsaplots
 import matplotlib.pyplot as plt
 from statsmodels.tsa.statespace.sarimax import SARIMAX
+from statsmodels.tsa.api import SimpleExpSmoothing
+from pmdarima import auto_arima
+import sqlite3
+
+
+conn = sqlite3.connect('wikitop100.db')
+query = 'SELECT * FROM page_visits'
+page_visits_df = pd.read_sql_query(query, conn)
+conn.close()
+
+top_page_df = page_visits_df
+
+print(top_page_df.head())
+
 
 """
 ADF Test
-First element of output is the test statistic. 
+First element of output is the test statistic.
 Test statistic shows how likely the data is stationary
-Second element indicates the p-value. 
-If p-value is >0.05, reject null hypothesis or else not, 
+Second element indicates the p-value.
+If p-value is >0.05, reject null hypothesis or else not,
 The null hypothesis is that data is not stationary.
 """
 
 # Plotting the ACF for visual interpretation
-fig = tsaplots.plot_acf(top_page_df['Views'], lags=60)
+fig = tsaplots.plot_acf(top_page_df['Visits'], lags=60)
 plt.show()
 
-test = adfuller(top_page_df['Views'])
+test = adfuller(top_page_df['Visits'])
 print(test)
 # Data is not stationary for the p-value
 
@@ -34,7 +48,7 @@ top_page_stationary_df = top_page_df.diff().dropna()
 ax = top_page_stationary_df.plot()
 
 # ADF test on stationary data
-test2 = adfuller(top_page_stationary_df['Views'])
+test2 = adfuller(top_page_stationary_df['Visits'])
 print(test2)
 ## Data is stationary
 
@@ -47,11 +61,11 @@ train = top_page_df[:'2016-09']
 test = top_page_df['2016-10':]
 
 # ACF plot
-fig = tsaplots.plot_acf(train['Views'], lags=30)
+fig = tsaplots.plot_acf(train['Visits'], lags=30)
 plt.show()
 
 # PACF plot
-fig = tsaplots.plot_pacf(train['Views'], lags=30)
+fig = tsaplots.plot_pacf(train['Visits'], lags=30)
 plt.show()
 
 """
@@ -90,7 +104,7 @@ confidence_interval = forecast.conf_int()
 
 # Plotting the Prediction using ARMA
 fig,ax=plt.subplots()
-train[-30:].rename(columns={'Views':'actual value'}).plot(ax=ax)
+train[-30:].rename(columns={'Visits':'actual value'}).plot(ax=ax)
 forecast_mean.plot(ax=ax,label='prediction')
 plt.fill_between(confidence_interval.index, \
                 confidence_interval['lower Views'], \
@@ -104,12 +118,12 @@ forecast_values = result.get_forecast(steps=test.shape[0])
 forecast_values_mean = forecast_values.predicted_mean
 conf_interval = forecast_values.conf_int()
 
-arma_forecast_df = pd.DataFrame({'Date':test.index,'Views':forecast_values.predicted_mean,'lower_views':conf_interval['lower Views'].values,'upper_views':conf_interval['upper Views'].values})
+arma_forecast_df = pd.DataFrame({'Date':test.index,'Visits':forecast_values.predicted_mean,'lower_views':conf_interval['lower Views'].values,'upper_views':conf_interval['upper Views'].values})
 arma_forecast_df = arma_forecast_df.set_index('Date')
 
 fig,ax=plt.subplots()
-test.rename(columns={'Views':'Actual value'}).plot(ax=ax)
-arma_forecast_df[['Views']].rename(columns={'Views':'Forecast'}).plot(ax=ax,label='Forecast')
+test.rename(columns={'Visits':'Actual value'}).plot(ax=ax)
+arma_forecast_df[['Visits']].rename(columns={'Visits':'Forecast'}).plot(ax=ax,label='Forecast')
 plt.fill_between(arma_forecast_df.index, \
                 arma_forecast_df.lower_views, \
                 arma_forecast_df.upper_views, \
@@ -165,7 +179,7 @@ arima_result.summary()
 
 # Plotting the prediction
 fig,ax=plt.subplots()
-train[-30:].rename(columns={'Views':'actual value'}).plot(ax=ax)
+train[-30:].rename(columns={'Visits':'actual value'}).plot(ax=ax)
 arima_forecast_mean[-30:].plot(ax=ax,label='prediction')
 plt.legend()
 plt.show()
@@ -175,12 +189,12 @@ arima_forecast_values = arima_result.get_forecast(steps=test.shape[0])
 arima_forecast_mean = arima_forecast_values.predicted_mean
 arima_conf_interval = arima_forecast_values.conf_int()
 
-arima_forecast_df = pd.DataFrame({'Date':test.index,'Views':arima_forecast_values.predicted_mean,'lower_views':arima_conf_interval['lower Views'].values,'upper_views':arima_conf_interval['upper Views'].values})
+arima_forecast_df = pd.DataFrame({'Date':test.index,'Visits':arima_forecast_values.predicted_mean,'lower_views':arima_conf_interval['lower Views'].values,'upper_views':arima_conf_interval['upper Views'].values})
 arima_forecast_df = arima_forecast_df.set_index('Date')
 
 fig,ax=plt.subplots()
-test.rename(columns={'Views':'Test'}).plot(ax=ax)
-arima_forecast_df[['Views']].rename(columns={'Views':'Forecast'}).plot(ax=ax)
+test.rename(columns={'Visits':'Test'}).plot(ax=ax)
+arima_forecast_df[['Visits']].rename(columns={'Visits':'Forecast'}).plot(ax=ax)
 plt.fill_between(arima_forecast_df.index, \
                 arima_forecast_df.lower_views, \
                 arima_forecast_df.upper_views, \

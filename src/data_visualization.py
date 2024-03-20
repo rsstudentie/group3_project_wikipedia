@@ -9,25 +9,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import def_language as language
-from loadsql import download_data_from_sqlite as dwnld
+import sqlite3
 
 """ We need to import the data from the SQL database"""
 
+conn = sqlite3.connect('wikitop100.db')
+query = 'SELECT * FROM page_visits'
+page_visits_df = pd.read_sql_query(query, conn)
+conn.close()
 
-select_statement = """SELECT Page, SUM(Visits)
-from page_visits
-group by Page
-order by SUM(Visits) desc
-limit 100;
-"""
-
-
-dwnld(select_statement=select_statement)
-
-
-
-data_path = ...
-train_data = pd.read_csv(data_path)
+train_data = page_visits_df
 
 # Transforming the Date column to a datetime format
 train_data['Date'] = pd.DatetimeIndex(train_data['Date'])
@@ -58,7 +49,7 @@ def plot_avg_views_per_day(ax, train_data):
     return ax.plot(temp, label='Visits')
 
 fig, ax = plt.subplots(1, 1)
-plot_avg_views_per_day(ax, train_data)
+plot_avg_views_per_day(plt, train_data)
 
 
 def plot_median_views_per_day(ax, train_data):
@@ -73,11 +64,10 @@ def plot_median_views_per_day(ax, train_data):
 
     # Plot the median views per day
 
-    # # Customize and show the plot
-    # ax.legend()
-    # ax.xticks(fontsize=8)
-    # ax.yticks(fontsize=8)
-    # ax.tight_layout()
+    ax.legend()
+    ax.xticks(fontsize=8)
+    ax.yticks(fontsize=8)
+    ax.tight_layout()
 
     return ax.plot(temp, label='Visits')
 

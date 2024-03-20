@@ -64,8 +64,8 @@ def upload_csv_to_sqlite(file_path, chunk_size=1000):
         chunk.to_sql(table_name, conn, if_exists='append', index=False)
 
     conn.close()
-
-def main():
-    file_path = "../data/clean/train_1_cleaned.csv"
-    upload_csv_to_sqlite(file_path)
-
+#
+# def main():
+#     file_path = "../data/clean/train_1_cleaned.csv"
+#     upload_csv_to_sqlite(file_path)
+#
