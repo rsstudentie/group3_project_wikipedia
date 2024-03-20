@@ -30,7 +30,7 @@ cursor_new.execute('''
 
 # Step 3: For each top page, select all records and insert them into the new database
 for page, _ in top_pages:
-    cursor_existing.execute('SELECT Page, Date, Visits FROM page_visits5 WHERE Page = ?', (page,))
+    cursor_existing.execute('SELECT Page, Date, Visits FROM page_visits WHERE Page = ?', (page,))
     page_records = cursor_existing.fetchall()
     cursor_new.executemany('INSERT INTO page_visits (Page, Date, Visits) VALUES (?, ?, ?)', page_records)
 
