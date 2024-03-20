@@ -1,0 +1,7 @@
+wikipedia/data/
+wikipedia/data/*
+dist/*
+dist/
+data/
+data/*
+src/wikipedia.db
