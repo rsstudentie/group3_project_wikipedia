@@ -1,2 +1,4 @@
 wikipedia/data/
 wikipedia/data/*
+dist/*
+dist/
