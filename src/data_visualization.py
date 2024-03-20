@@ -23,6 +23,7 @@ train_data = page_visits_df
 # Transforming the Date column to a datetime format
 train_data['Date'] = pd.DatetimeIndex(train_data['Date'])
 
+print(train_data.head(10).sort_values(by='Date', ascending=False))
 
 def plot_avg_views_per_day(ax, train_data):
     # Calculate the average number of views per day
@@ -48,7 +49,6 @@ def plot_avg_views_per_day(ax, train_data):
 
     return ax.plot(temp, label='Visits')
 
-fig, ax = plt.subplots(1, 1)
 plot_avg_views_per_day(plt, train_data)
 
 
@@ -74,24 +74,9 @@ def plot_median_views_per_day(ax, train_data):
 
 plot_median_views_per_day(plt, train_data)
 
-
-def extract_date_components(df, date_column):
-    """
-    Extracts year, month, and day from a date column in a DataFrame and creates new columns for each.
-
-    Parameters:
-    - df: pandas DataFrame containing the date column.
-    - date_column: The name of the column in df that contains date values.
-    """
-    # Ensure the date column is in datetime format
-    df[date_column] = pd.to_datetime(df[date_column])
-
-    # Create new columns for year, month, and day
-    df['year'] = df[date_column].dt.year
-    df['month'] = df[date_column].dt.month
-    df['day'] = df[date_column].dt.day
-
-extract_date_components(train_data, 'Date')
+train_data['year'] = train_data['Date'].dt.year
+train_data['month'] = train_data['Date'].dt.month
+train_data['day'] = train_data['Date'].dt.day
 
 
 # Creating new column and replacing month with encoded value
@@ -157,20 +142,39 @@ temp1['Wikipedia_page'] = temp1.Page.apply(language.detect_language)
 # Creating a new column for detecting the language from the page title
 temp1['Page_language'] = temp1.Wikipedia_page.apply(language.lang_code)
 
-# Total number of views based on language of Wikipedia webpage
-fig,ax = plt.subplots(figsize=(30,6))
-lang_df = temp1.groupby('Page_language')['Visits'].sum().reset_index()
-lang_df = lang_df[lang_df['Page_language']!='None']
-lang_df['Visits'] = round(lang_df['Visits']/1000000,0)
 
-bar_graph = lang_df.plot.bar(x='Page_language',y='Visits',rot=30,ax=ax)
-bar_graph.set_ylabel('Total views (in millions)')
-bar_graph.set_title('Total number of views based on language of webpage')
+def plot_language_bar_chart(df):
+    # Group by page language and sum visits
+    lang_df = df.groupby('Page_language')['Visits'].sum().reset_index()
+    # Remove 'None' language entries
+    lang_df = lang_df[lang_df['Page_language'] != 'None']
+    # Convert visits to millions and round off
+    lang_df['Visits'] = round(lang_df['Visits'] / 1000000, 0)
 
-for p in ax.patches:
-    ax.annotate(str(p.get_height()), (p.get_x(), p.get_height()+1000))
-ax.legend()
-plt.show()
+    # Create bar chart
+    fig, ax = plt.subplots(figsize=(12, 8))  # Adjust figure size for better layout
+    bars = ax.bar(lang_df['Page_language'], lang_df['Visits'])
+
+    # Set label sizes
+    ax.set_xlabel('Page Language', fontsize='small')
+    ax.set_ylabel('Total Views (in millions)', fontsize='small')
+    ax.set_title('Total number of views based on language of webpage', fontsize='small', pad=20)
+    ax.tick_params(axis='x', labelsize='x-small', rotation=45)
+    ax.tick_params(axis='y', labelsize='small')
+
+    # Adding data labels
+    for bar in bars:
+        height = bar.get_height()
+        ax.annotate('{}'.format(height),
+                    xy=(bar.get_x() + bar.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='bottom', fontsize='x-small')
+
+    plt.tight_layout()  # Automatically adjust subplot parameters to give specified padding
+    plt.show()
+
+plot_language_bar_chart(temp1)
 
 ###
 # Identifying the top 5 pages per number of visits
