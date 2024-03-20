@@ -42,7 +42,25 @@ The project will be available at `http://localhost:8501/`.
 To Reinitialize the database, run the following command:
 
 ```bash
-python ./wikipedia/main.py --reinitialize
+python ./wikipedia/main.py initdb
+```
+
+To download the data from Kaggle, run the following command:
+
+```bash
+python ./wikipedia/main.py kaggledownload
+```
+
+To sample the data, run the following command:
+
+```bash
+python ./wikipedia/main.py sampledata
+```
+
+To get the number of rows in the database, run the following command:
+
+```bash
+python ./wikipedia/main.py getrows [ "working" | "complete"  ]
 ```
 
 
