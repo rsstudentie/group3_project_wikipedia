@@ -1,10 +1,47 @@
 from src.sqllite.sqllite_engine import SqlLiteEngine
 from wikipedia.src.analytics.devices import compare_visits_bar_chart, analyze_time_series
 from wikipedia.src.analytics.random_forest import random_forest
+from wikipedia.src.data_extraction.data_cleaning import clean_raw_data
+from wikipedia.src.data_extraction.data_sampling import sample_data
+from wikipedia.src.data_extraction.data_sql_loading import upload_csv_to_sqlite
 # from src.data_extraction.data_download import download_and_unzip_data
 
 from wikipedia.src.visualization.data_visualization import plot_avg_views_per_day, \
     plot_median_views_per_day, plot_web_traffic_over_days_of_month, time_series_of_page_with_max_views
+
+from wikipedia.src.data_extraction.data_download import DataExtractor
+
+import typer
+
+app = typer.Typer()
+
+@app.command()
+def initdb():
+    init_database()
+
+@app.command()
+def kaggledownload():
+    DataExtractor.download_and_unzip_data()
+    clean_raw_data()
+
+@app.command()
+def sampledata():
+    sample_data()
+    upload_csv_to_sqlite()
+
+@app.command()
+def getrows(db: str):
+    if db == 'working':
+        db_engine = SqlLiteEngine(db="wikipedia")
+    elif db == 'complete':
+        db_engine = SqlLiteEngine(db="wikipedia_complete")
+
+    session = SqlLiteEngine.get_session()
+    with session as session:
+        result = session.execute('SELECT count(*) FROM page_visits')
+        print(result)
+
+
 
 
 def init_database():
@@ -18,6 +55,10 @@ def init_database():
 
 
 # Call visualization functions from each file in a seperate functions
+
+
+# visualize_data(df)
+
 
 
 def init_projecct():
@@ -46,5 +87,4 @@ def init_projecct():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print("Project Initialized")
     init_projecct()

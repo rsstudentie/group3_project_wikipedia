@@ -1,6 +1,52 @@
 # group3_project_wikipedia
 This is the repository for Group 3's Wikipedia project.
 
+## Running the Project Locally
+
+To get the project up and running, follow the steps below:
+
+### Step 1: Clone the Repository
+
+Clone the repository to your local machine:
+
+```bash
+git clone
+```
+
+### Step 2: Install Required Dependencies
+
+Navigate into the project directory:
+
+```bash
+cd group3_project_wikipedia
+```
+
+Install the project dependencies:
+
+```bash
+poetry install
+```
+
+### Step 3: Start Project Locally
+
+Start the project:
+
+```bash
+python ./wikipedia/main.py
+```
+
+The project will be available at `http://localhost:8501/`.
+
+## Additional Information
+
+To Reinitialize the database, run the following command:
+
+```bash
+python ./wikipedia/main.py --reinitialize
+```
+
+
+
 ## Contributing
 
 To contribute to this project, follow the steps outlined below:
