@@ -1,7 +1,9 @@
 import re
+
+
 def detect_language(page):
     text = page.split('.wikipedia')
-    if re.search('[a-z][a-z]',text[0][-2:]):
+    if re.search('[a-z][a-z]', text[0][-2:]):
         return text[0][-2:]
     else:
         return 'none'
@@ -24,4 +26,3 @@ def lang_code(code):
         return 'Spanish'
     else:
         return 'None'
-

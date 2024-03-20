@@ -1,6 +1,7 @@
+# main.py
 import streamlit as st
 import pandas as pd
-import os
+from main import print_hi, init_projecct  # Import the function from the different module
 
 # Custom CSS for drag and drop
 custom_css = """
@@ -14,6 +15,7 @@ custom_css = """
 </style>
 """
 
+
 # Function to create sample DataFrame
 def create_sample_df():
     data = {
@@ -22,6 +24,7 @@ def create_sample_df():
         'Column3': [True, False, True]
     }
     return pd.DataFrame(data)
+
 
 def main():
     st.sidebar.title("Navigation")
@@ -77,5 +80,11 @@ def main():
                 mime='text/csv'
             )
 
+    # Button to call function from different module
+    if st.button("Call Function from Other Module"):
+        print_hi("ashdvahsvd")  # Call the function from the different module
+
+
 if __name__ == "__main__":
+    init_projecct()
     main()

@@ -12,6 +12,7 @@ python = "^3.11"
 ruff = "^0.3.3"
 kaggle = "^1.6.6"
 streamlit = "^1.32.2"
+pmdarima = "^2.0.4"
 
 
 [build-system]
