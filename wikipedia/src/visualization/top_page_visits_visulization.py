@@ -2,9 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sqlite3
+from sqlalchemy import text
 
 conn = sqlite3.connect('wikitop100.db')
-query = 'SELECT * FROM page_visits'
+query = text('SELECT * FROM page_visits')
 df = pd.read_sql_query(query, conn)
 conn.close()
 

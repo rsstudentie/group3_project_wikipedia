@@ -4,6 +4,7 @@ File that plots comparison between mobile and desktop accesses
 
 import pandas as pd
 import matplotlib.pyplot as plt
+from sqlalchemy import text
 
 from wikipedia.src.sqllite.sqllite_engine import SqlLiteEngine
 
@@ -11,7 +12,7 @@ from wikipedia.src.sqllite.sqllite_engine import SqlLiteEngine
 def analyze_time_series():
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT * FROM page_visits')
+        result = session.execute(text('SELECT * FROM page_visits'))
         df = pd.DataFrame(result)
 
     # Convert 'Date' to datetime if it's not already
@@ -38,7 +39,7 @@ def analyze_time_series():
 def compare_visits_bar_chart():
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT * FROM page_visits')
+        result = session.execute(text('SELECT * FROM page_visits'))
         df = pd.DataFrame(result)
 
     # Aggregate total visits by type

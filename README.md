@@ -10,7 +10,7 @@ To get the project up and running, follow the steps below:
 Clone the repository to your local machine:
 
 ```bash
-git clone
+git clone https://github.com/rsstudentie/group3_project_wikipedia.git
 ```
 
 ### Step 2: Install Required Dependencies
@@ -32,7 +32,8 @@ poetry install
 Start the project:
 
 ```bash
-python ./wikipedia/main.py
+poetry shell
+streamlit run wikipedia/main.py
 ```
 
 The project will be available at `http://localhost:8501/`.

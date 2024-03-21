@@ -13,13 +13,14 @@ import sqlite3
 
 from wikipedia.src.analytics import language
 from wikipedia.src.sqllite.sqllite_engine import SqlLiteEngine
+from sqlalchemy import text
 
 """ We need to import the data from the SQL sqllite"""
 
 def plot_avg_views_per_day():
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT * FROM page_visits')
+        result = session.execute(text('SELECT * FROM page_visits'))
         train_data = pd.DataFrame(result)
 
     # Transforming the Date column to a datetime format
@@ -53,7 +54,7 @@ def plot_avg_views_per_day():
 def plot_median_views_per_day():
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT * FROM page_visits')
+        result = session.execute(text('SELECT * FROM page_visits'))
         train_data = pd.DataFrame(result)
 
     # Calculate the median number of views per day
@@ -87,7 +88,7 @@ def extract_date_components():
 
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT * FROM page_visits')
+        result = session.execute(text('SELECT * FROM page_visits'))
         df = pd.DataFrame(result)
 
 
@@ -105,7 +106,7 @@ def extract_date_components():
 def plot_web_traffic_over_days_of_month():
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT * FROM page_visits')
+        result = session.execute(text('SELECT * FROM page_visits'))
         train_data = pd.DataFrame(result)
 
     train_data = extract_date_components()
@@ -167,7 +168,7 @@ def top_pages():
     """
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT * FROM page_visits')
+        result = session.execute(text('SELECT * FROM page_visits'))
         train_data = pd.DataFrame(result)
 
     # Top 5 pages with maximum number of views
@@ -185,7 +186,7 @@ def detect_language():
     """
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT * FROM page_visits')
+        result = session.execute(text('SELECT * FROM page_visits'))
         train_data = pd.DataFrame(result)
 
     # Detecting the language of the Wikipedia page

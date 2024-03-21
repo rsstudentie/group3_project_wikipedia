@@ -9,13 +9,14 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 from wikipedia.src.sqllite.sqllite_engine import SqlLiteEngine
+from sqlalchemy import text
 
 
 def random_forest():
     # Initiating engine
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT * FROM page_visits')
+        result = session.execute(text('SELECT * FROM page_visits'))
         df = pd.DataFrame(result)
 
     sample_pages = df['Page'].drop_duplicates().sample(n=5, random_state=1201).values
