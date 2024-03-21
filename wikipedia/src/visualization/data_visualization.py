@@ -30,7 +30,7 @@ def plot_avg_views_per_day():
     temp = train_data.groupby('Date')['Visits'].mean()
 
     # Set up the plot
-    plt.figure(figsize=(15, 4))
+    plt.figure(figsize=(15, 10))
     plt.xlabel('Date', fontsize=8)
     plt.ylabel('Avg views', fontsize=8)
     plt.title('Average number of views per day', fontsize=12)
@@ -38,8 +38,8 @@ def plot_avg_views_per_day():
     # Plot the average views per day
 
     # # Set up the ticks
-    plt.xticks(fontsize=8)
-    plt.yticks(fontsize=8)
+    # plt.xticks(fontsize=8)
+    # plt.yticks(fontsize=8)
 
     # Show legend
     plt.legend()
@@ -61,7 +61,7 @@ def plot_median_views_per_day():
     temp = train_data.groupby('Date')['Visits'].median()
 
     # Set up the plot
-    plt.figure(figsize=(15, 4))
+    plt.figure(figsize=(15, 10))
     plt.xlabel('Date', fontsize=8)
     plt.ylabel('Median views', fontsize=8)
     plt.title('Median number of views per day', fontsize=8)
@@ -69,8 +69,8 @@ def plot_median_views_per_day():
     # Plot the median views per day
 
     plt.legend()
-    plt.xticks(fontsize=8)
-    plt.yticks(fontsize=8)
+    # plt.xticks(fontsize=8)
+    # plt.yticks(fontsize=8)
     plt.tight_layout()
 
     plt.plot(temp, label='Visits')
@@ -154,12 +154,6 @@ def plot_web_traffic_over_days_of_month():
 
     return plt
 
-###
-# # Dropping columns previously created for new visualization
-# cols_to_drop = ['year', 'month', 'day', 'month_num', 'weekday', 'weekday', 'weekday#']
-# train_data.drop(cols_to_drop, axis=1, inplace=True)
-# train_data
-
 def top_pages():
     """
     Function to identify the top 5 pages with the maximum number of views
@@ -178,6 +172,29 @@ def top_pages():
     return top_pages_list
 
 # Detecting page language from URL code
+def detect_language_new():
+    """
+    Function to detect the language of the Wikipedia page
+
+    :return: temp1: DataFrame with Wikipedia page language and language code
+    """
+    session = SqlLiteEngine().get_session()
+    with session as session:
+        result = session.execute(text('SELECT * FROM page_visits'))
+        train_data = pd.DataFrame(result)
+
+    # Detecting the language of the Wikipedia page
+    temp1 = train_data.groupby('Page').count().reset_index()
+
+    temp1['Wikipedia_page'] = temp1.Page.apply(language.detect_language)
+
+    # Creating a new column for detecting the language from the page title
+    temp1['Page_language'] = temp1.Wikipedia_page.apply(language.lang_code)
+
+    temp2 = temp1[['Page', 'Page_language']]
+
+    return temp2
+
 def detect_language():
     """
     Function to detect the language of the Wikipedia page
@@ -191,12 +208,15 @@ def detect_language():
 
     # Detecting the language of the Wikipedia page
     temp1 = train_data
+
     temp1['Wikipedia_page'] = temp1.Page.apply(language.detect_language)
 
     # Creating a new column for detecting the language from the page title
     temp1['Page_language'] = temp1.Wikipedia_page.apply(language.lang_code)
 
     return temp1
+
+
 
 
 ###

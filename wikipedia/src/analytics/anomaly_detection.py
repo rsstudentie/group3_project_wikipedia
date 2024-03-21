@@ -28,10 +28,10 @@ def anamoly_detection():
     top_page_df['anomaly'] = isolation_forest_model.predict(top_page_df)
 
     # Plotting the data to better visualize anomalies
-    fig, ax = plt.subplots(figsize=(45,5))
+    fig, ax = plt.subplots(figsize=(45, 20))
     anomaly_df = top_page_df.loc[top_page_df['anomaly'] == -1].copy()
-    ax.plot(top_page_df.index,top_page_df['Visits'],color='blue', label = 'Normal')
-    plt.scatter(anomaly_df.index,anomaly_df['Visits'],color='red',s=100,label = 'Anomaly')
+    ax.plot(top_page_df.index, top_page_df['Visits'], color='blue', label='Normal')
+    plt.scatter(anomaly_df.index, anomaly_df['Visits'], color='red', s=100, label='Anomaly')
     plt.legend()
     plt.show()
 

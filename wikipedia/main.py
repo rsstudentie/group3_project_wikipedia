@@ -1,3 +1,6 @@
+import pandas as pd
+
+from wikipedia.src.analytics import language
 from wikipedia.src.sqllite.sqllite_engine import SqlLiteEngine
 from wikipedia.src.analytics.devices import compare_visits_bar_chart, analyze_time_series
 from wikipedia.src.analytics.random_forest import random_forest
@@ -5,8 +8,7 @@ from wikipedia.src.data_extraction.data_cleaning import clean_raw_data
 from wikipedia.src.data_extraction.data_sampling import sample_data
 from wikipedia.src.data_extraction.data_sql_loading import upload_csv_to_sqlite
 from wikipedia.src.data_extraction.data_download import download_and_unzip_data
-from src.visualization.data_visualization import plot_avg_views_per_day, plot_median_views_per_day, \
-    plot_web_traffic_over_days_of_month, time_series_of_page_with_max_views
+from src.visualization.data_visualization import plot_avg_views_per_day, plot_median_views_per_day, plot_web_traffic_over_days_of_month, time_series_of_page_with_max_views, top_pages, detect_language_new
 from wikipedia.src.analytics.anomaly_detection import anamoly_detection
 from sqlalchemy import text
 
@@ -46,6 +48,10 @@ def getrows(db: str):
         result = session.execute(text('SELECT count(*) FROM page_visits'))
         print(result)
 
+@app.command()
+def toppages():
+    result = top_pages()
+    print(result)
 
 def init_database():
     """"
@@ -70,7 +76,7 @@ def init_projecct():
 def main():
     st.sidebar.title("Navigation")
 
-    if st.sidebar.button("Basic Analysis"):
+    if st.sidebar.button("Basic Analysis - Graphs"):
         st.title("Average and Median Views per Day")
         t1 = plot_avg_views_per_day()
         st.pyplot(t1)
@@ -85,6 +91,17 @@ def main():
         t4 = time_series_of_page_with_max_views()
         st.pyplot(t4)
 
+
+    if st.sidebar.button("Basic Analysis - Tables"):
+        st.title("Top Pages")
+        t5 = top_pages()
+        st.table(t5)
+
+        st.title("Language Detection")
+        t6 = detect_language_new()
+        st.table(t6)
+
+
     if st.sidebar.button("Anamoaly Detection"):
         st.title("Anamolies in the Data")
         t1 = anamoly_detection()
@@ -93,7 +110,7 @@ def main():
         # Add your bar chart code here
 
     if st.sidebar.button("Random Forrest"):
-        st.title("Anamolies in the Data")
+        st.title("Random Forest Analysis")
         plt, mae, rmse, r_squared, mape = random_forest()
 
         st.pyplot(plt)
