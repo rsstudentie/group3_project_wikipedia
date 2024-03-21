@@ -1,8 +1,8 @@
 # main.py
 import streamlit as st
 import pandas as pd
-from main import print_hi, init_projecct  # Import the function from the different module
-from wikipedia.src.visualization.data_visualization import plot_median_views_per_day
+from main import init_projecct  # Import the function from the different module
+# from src.visualization.data_visualization import plot_median_views_per_day
 
 # Custom CSS for drag and drop
 custom_css = """
@@ -33,7 +33,7 @@ def main():
     if st.sidebar.button("Time Series"):
         st.title("Line Chart")
         # Add your line chart code here
-        plot_median_views_per_day()
+        # plot_median_views_per_day()
 
     if st.sidebar.button("Bar Chart"):
         st.title("Bar Chart")
@@ -42,7 +42,10 @@ def main():
 
     # Button to call function from different module
     if st.button("Call Function from Other Module"):
-        print_hi("ashdvahsvd")  # Call the function from the different module
+        print("aasdasd")
+        # init_projecct()
+        # plot_median_views_per_day()
+        # print_hi("ashdvahsvd")  # Call the function from the different module
 
 
 if __name__ == "__main__":

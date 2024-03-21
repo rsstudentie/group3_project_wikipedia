@@ -3,109 +3,92 @@ from zipfile import ZipFile
 from kaggle.api.kaggle_api_extended import KaggleApi
 
 
-class DataExtractor:
+def download_and_unzip_data():
     """
-    Class to download and extract the data from Kaggle
+    Downloads and extracts the data from Kaggle
 
-    init_args:
-        kaggle_json_path: str : The path to the kaggle.json file
-
-    Methods:
-    download_and_unzip_data: Downloads and extracts the data from Kaggle
+    :param kaggle_json_path: str : The path to the kaggle.json file
+    :return: None
     """
 
-    def __init__(self):
-        self.kaggle_json_path = ""
+    # Set up the Kaggle API
+    api = KaggleApi()
 
-    def download_and_unzip_data(self, kaggle_json_path):
-        """
-        Downloads and extracts the data from Kaggle
+    # Authenticate using the provided kaggle.json file
+    api.authenticate()
 
-        :param kaggle_json_path: str : The path to the kaggle.json file
-        :return: None
-        """
+    # Define the competition name
+    competition_name = "web-traffic-time-series-forecasting"
 
-        self.kaggle_json_path = kaggle_json_path
+    # Define the directory to save the downloaded data
+    data_dir = "../../../data"
 
-        # Set up the Kaggle API
-        api = KaggleApi()
+    # Create the directory if it doesn't exist
+    os.makedirs(data_dir, exist_ok=True)
 
-        # Authenticate using the provided kaggle.json file
-        api.authenticate(path=self.kaggle_json_path)
+    try:
+        # Download the competition data
+        api.competition_download_files(competition_name, path=data_dir)
 
-        # Define the competition name
-        competition_name = "web-traffic-time-series-forecasting"
+        # Extract the zip file
+        with ZipFile(os.path.join(data_dir, competition_name + ".zip"), 'r') as zip_ref:
+            zip_ref.extractall(data_dir)
 
-        # Define the directory to save the downloaded data
-        data_dir = "../../../data"
+        print("Data downloaded and extracted successfully.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
-        # Create the directory if it doesn't exist
-        os.makedirs(data_dir, exist_ok=True)
 
-        try:
-            # Download the competition data
-            api.competition_download_files(competition_name, path=data_dir)
+def download_data():
+    """
+    Downloads the data from Kaggle
 
-            # Extract the zip file
-            with ZipFile(os.path.join(data_dir, competition_name + ".zip"), 'r') as zip_ref:
-                zip_ref.extractall(data_dir)
+    :param kaggle_json_path: str : The path to the kaggle.json file
+    :return: None
+    """
 
-            print("Data downloaded and extracted successfully.")
-        except Exception as e:
-            print(f"An error occurred: {str(e)}")
+    # Set up the Kaggle API
+    api = KaggleApi()
 
-    def download_data(self, kaggle_json_path):
-        """
-        Downloads the data from Kaggle
+    # Authenticate using the provided kaggle.json file
+    api.authenticate()
 
-        :param kaggle_json_path: str : The path to the kaggle.json file
-        :return: None
-        """
+    # Define the competition name
+    competition_name = "web-traffic-time-series-forecasting"
 
-        self.kaggle_json_path = kaggle_json_path
+    # Define the directory to save the downloaded data
+    data_dir = "../../../data/raw/"
 
-        # Set up the Kaggle API
-        api = KaggleApi()
+    # Create the directory if it doesn't exist
+    os.makedirs(data_dir, exist_ok=True)
 
-        # Authenticate using the provided kaggle.json file
-        api.authenticate(path=self.kaggle_json_path)
+    try:
+        # Download the competition data
+        api.competition_download_files(competition_name, path=data_dir)
 
-        # Define the competition name
-        competition_name = "web-traffic-time-series-forecasting"
+        print("Data downloaded successfully.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
-        # Define the directory to save the downloaded data
-        data_dir = "../../../data/raw/"
 
-        # Create the directory if it doesn't exist
-        os.makedirs(data_dir, exist_ok=True)
+def unzip_data():
+    """
+    Extracts the data from the downloaded zip file
 
-        try:
-            # Download the competition data
-            api.competition_download_files(competition_name, path=data_dir)
+    :return: None
+    """
 
-            print("Data downloaded successfully.")
-        except Exception as e:
-            print(f"An error occurred: {str(e)}")
+    # Define the competition name
+    competition_name = "web-traffic-time-series-forecasting"
 
-    def unzip_data(self):
-        """
-        Extracts the data from the downloaded zip file
+    # Define the directory to save the downloaded data
+    data_dir = "../../../data/raw/"
 
-        :return: None
-        """
+    try:
+        # Extract the zip file
+        with ZipFile(os.path.join(data_dir, competition_name + ".zip"), 'r') as zip_ref:
+            zip_ref.extractall(data_dir)
 
-        # Define the competition name
-        competition_name = "web-traffic-time-series-forecasting"
-
-        # Define the directory to save the downloaded data
-        data_dir = "../../../data/raw/"
-
-        try:
-            # Extract the zip file
-            with ZipFile(os.path.join(data_dir, competition_name + ".zip"), 'r') as zip_ref:
-                zip_ref.extractall(data_dir)
-
-            print("Data extracted successfully.")
-        except Exception as e:
-            print(f"An error occurred: {str(e)}")
-
+        print("Data extracted successfully.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")

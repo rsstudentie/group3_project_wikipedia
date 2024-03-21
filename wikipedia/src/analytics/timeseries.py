@@ -9,16 +9,14 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.graphics import tsaplots
 import matplotlib.pyplot as plt
 from statsmodels.tsa.statespace.sarimax import SARIMAX
-from statsmodels.tsa.api import SimpleExpSmoothing
-from pmdarima import auto_arima
-import sqlite3
+from sqlalchemy import text
 
 from wikipedia.src.sqllite.sqllite_engine import SqlLiteEngine
 
 def timeseries():
     session = SqlLiteEngine().get_session()
     with session as session:
-        result = session.execute('SELECT Date, Visits FROM page_visits')
+        result = session.execute(text('SELECT Date, Visits FROM page_visits'))
         page_visits_df = pd.DataFrame(result)
 
     top_page_df = page_visits_df
